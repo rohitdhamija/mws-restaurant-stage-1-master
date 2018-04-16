@@ -10,7 +10,7 @@ class DBHelper {
   static get DATABASE_URL() {
     //const port = 8000 // Change this to your server port
     //return `http://localhost:${port}/data/restaurants.json`;
-    const ghRepository = 'https://michnaj.github.io/MWS_Stage1'
+    const ghRepository = 'https://rohitdhamija.github.io/MWS_Stage1'
     return `${ghRepository}/data/restaurants.json`;
   }
 

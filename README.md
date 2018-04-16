@@ -1,11 +1,15 @@
 # Mobile Web Specialist Certification Course
 ---
+#### _Three Stage Course Material Project - Restaurant Reviews_
 
-## How to Run
-1. npm install http-server -g
-2. http-server . -p 3000
+## Project Overview: Stage 1
 
-## Review Notes
-- Map loads when online
-- Did not see the restaurants.json issue, but it was missing from the cache. Error was seen when attempting to use the site offline?
-- Added restaurants.json to the cache
+**Restaurant Reviews** project is now responsive on different sized displays and accessible for screen reader use. Also added a service worker to begin the process of creating a seamless offline experience for users.
+
+### How to start?
+
+Just visit [website](https://rohitdhamija.github.io/MWS_Stage1/) to run application.
+
+### Note about ES6
+
+Most of the code in this project has been written to the ES6 JavaScript specification for compatibility with modern web browsers and future proofing JavaScript code.
