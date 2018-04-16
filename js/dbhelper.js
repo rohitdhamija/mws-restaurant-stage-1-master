@@ -8,14 +8,16 @@ class DBHelper {
    * Change this to restaurants.json file location on your server.
    */
   static get DATABASE_URL() {
-    const port = 8000 // Change this to your server port
-    return `http://localhost:${port}/data/restaurants.json`;
+    //const port = 8000 // Change this to your server port
+    //return `http://localhost:${port}/data/restaurants.json`;
+    const ghRepository = 'https://michnaj.github.io/MWS_Stage1'
+    return `${ghRepository}/data/restaurants.json`;
   }
 
   /**
    * Fetch all restaurants.
    */
-  static fetchRestaurants(callback) { 
+  static fetchRestaurants(callback) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', DBHelper.DATABASE_URL);
     xhr.onload = () => {
@@ -143,48 +145,27 @@ class DBHelper {
    * Restaurant page URL.
    */
   static urlForRestaurant(restaurant) {
-
     return (`./restaurant.html?id=${restaurant.id}`);
   }
 
   /**
    * Restaurant image URL.
+   * Added size parameter - defines witch size of image should return
    */
-/*Since <picture> element wasn't used here I decided to implement its logic using javascript */
-  static imageUrlForRestaurant(restaurant) {
-    /*that suffix is gonna be calculated and later on added to my url*/
-    let img_suffix;
-    /*I'm getting screen width*/
-    let screen_width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-    /*I'm gettin dpi*/
-    let device_pixel_ratio = window.devicePixelRatio;
-    /*I cut '.jpg' part of the restaurant.photograph value*/
-    let sliced_photoName = restaurant.photograph.slice(0,1);
-    /*I'm implementing picture like logic*/
-    if( screen_width <= 550 ){
-      if( device_pixel_ratio <= 1.5 ){
-        img_suffix = '-300_x1.jpg';
-      }
-      else {
-        img_suffix = '-300_x2.jpg';
-      }
-    }
-    else if ( screen_width <= 900 ){
-      if( device_pixel_ratio <= 1.5 ){
-        img_suffix = '-500_x1.jpg';
-      }
-      else {
-        img_suffix = '-500_x2.jpg';
-      }
-    } else if ( screen_width >= 901 ){
-      if( device_pixel_ratio <= 1.5 ){
-        img_suffix = '-1000_x1.jpg';
-      }
-      else {
-        img_suffix = '-1000_x2.jpg';
-      }
-    }
-        return (`/images/${sliced_photoName}${img_suffix}`);
+  static imageUrlForRestaurant(restaurant, size) {
+    let suffix = '';
+    let image = `${restaurant.photograph}`;
+    if (size === 'sm') suffix = '_sm';
+    else if (size === 'md') suffix = '_md';
+    let newImage = image.replace('.', suffix + '.');
+    return ('img/' + newImage);
+  }
+
+  /**
+   * Restaurant image alt attribute.
+   */
+  static imageAltAttribute(restaurant) {
+    return (`Image of ${restaurant.name} Restaurant`);
   }
 
   /**

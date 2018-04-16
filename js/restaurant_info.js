@@ -1,15 +1,6 @@
-/*I didn't register service worker here because it's already beeing registered in main.js
-and restaurant.html and index.html are the same origin so I don't have to do anything here 
-right?*/
-
 let restaurant;
 var map;
 
-/* I do this because I have no any other idea how to rerender images when resizing.*/
-window.addEventListener('resize', (event) => {
-    location.reload();
-});
-/*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 /**
  * Initialize Google map, called from HTML.
  */
@@ -19,7 +10,7 @@ window.initMap = () => {
       console.error(error);
     } else {
       self.map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 16,
+        zoom: 17,
         center: restaurant.latlng,
         scrollwheel: false
       });
@@ -28,6 +19,7 @@ window.initMap = () => {
     }
   });
 }
+
 /**
  * Get current restaurant from page URL.
  */
@@ -59,16 +51,24 @@ fetchRestaurantFromURL = (callback) => {
 fillRestaurantHTML = (restaurant = self.restaurant) => {
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
-  name.setAttribute('tabindex', 0);
+
   const address = document.getElementById('restaurant-address');
-  address.setAttribute('tabindex', 0);
   address.innerHTML = restaurant.address;
 
   const image = document.getElementById('restaurant-img');
-  image.className = 'restaurant-img'
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
-/*setting alt attribute but since its just a picture@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-  image.setAttribute('alt',`picture representing "${restaurant.name}" restaurant`);
+  image.className = 'restaurant-img';
+  let smSource = document.createElement('source');
+  let mdSource = document.createElement('source');
+  let imgTag = document.createElement('img');
+  smSource.setAttribute('media', '(max-width: 380px)');
+  smSource.setAttribute('srcset', DBHelper.imageUrlForRestaurant(restaurant, 'sm'));
+  mdSource.setAttribute('media', '(max-width: 575px)');
+  mdSource.setAttribute('srcset', DBHelper.imageUrlForRestaurant(restaurant, 'md'));
+  imgTag.setAttribute('alt', DBHelper.imageAltAttribute(restaurant));
+  imgTag.src = DBHelper.imageUrlForRestaurant(restaurant, '');
+  image.appendChild(smSource);
+  image.appendChild(mdSource);
+  image.appendChild(imgTag);
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
@@ -86,9 +86,9 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
  */
 fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
   const hours = document.getElementById('restaurant-hours');
-  hours.setAttribute('tabindex', 0);
   for (let key in operatingHours) {
     const row = document.createElement('tr');
+    row.tabIndex = 0;
 
     const day = document.createElement('td');
     day.innerHTML = key;
@@ -107,7 +107,6 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
  */
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
-  /*fixing tag order by lowering h2 to h3*/
   const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
   container.appendChild(title);
@@ -130,20 +129,23 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
  */
 createReviewHTML = (review) => {
   const li = document.createElement('li');
-  li.setAttribute('tabindex', 0);
   const name = document.createElement('p');
+  name.classList.add('name');
   name.innerHTML = review.name;
   li.appendChild(name);
 
   const date = document.createElement('p');
+  date.classList.add('date');
   date.innerHTML = review.date;
   li.appendChild(date);
 
   const rating = document.createElement('p');
+  rating.classList.add('rating');
   rating.innerHTML = `Rating: ${review.rating}`;
   li.appendChild(rating);
 
   const comments = document.createElement('p');
+  comments.classList.add('comment');
   comments.innerHTML = review.comments;
   li.appendChild(comments);
 
@@ -155,10 +157,12 @@ createReviewHTML = (review) => {
  */
 fillBreadcrumb = (restaurant=self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
-  breadcrumb.setAttribute('aria-label', 'Breadcrumb');
   const li = document.createElement('li');
-  li.innerHTML = restaurant.name;
-  li.setAttribute('aria-current', 'page');
+  const link = document.createElement('a');
+  link.innerHTML = restaurant.name;
+  link.href = DBHelper.urlForRestaurant(restaurant);
+  link.setAttribute('aria-current', 'page');
+  li.append(link);
   breadcrumb.appendChild(li);
 }
 

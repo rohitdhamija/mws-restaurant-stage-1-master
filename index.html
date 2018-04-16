@@ -1,37 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <meta charset = 'utf-8'>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/responsive.css">
   <title>Restaurant Reviews</title>
 </head>
 
 <body>
-<!-- I was first trying to make map unfocusable but that didn't work out so I decided to make a skip link here and allow user to skip to the main content -->
-<a href="#neighborhoods-select" class="skip-link">Skip focusing map</a>
   <header>
-    <nav>
-      <h1><a href="/">Restaurant Reviews</a></h1>
+    <nav id="heading-nav">
+      <h1><a href="/MWS_Stage1/index.html"><span class="symbol">?</span> Restaurant Reviews</a></h1>
     </nav>
   </header>
 
   <main id="maincontent">
-  <!--I decided that for screen reader users map is not usefull so I gave it aria-hidden="true"-->
-    <section id="map-container" aria-hidden="true" aria-role="application">
-      <div id="map"></div>
+    <section id="map-container">
+      <div id="map" role="application" aria-label="Google Maps" aria-hidden="true" tabindex="-1"></div>
     </section>
     <section>
       <div class="filter-options">
         <h2>Filter Results</h2>
-<!--I added 'onfocus=(..)' because I needed to go back to the top of the screen because
-otherwise focused element was covered by the fixed menu -->
-        <select id="neighborhoods-select" name="neighborhoods" onfocus="scrollLock();" onchange="updateRestaurants()">
+        <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" aria-label="Neighborhoods">
           <option value="all">All Neighborhoods</option>
         </select>
-        <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
+        <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" aria-label="Cuisines">
           <option value="all">All Cuisines</option>
         </select>
       </div>
@@ -41,11 +37,11 @@ otherwise focused element was covered by the fixed menu -->
 
   <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
   <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD9NPi6nDinjT7G5qaYjFUaF6-ou0TzieA&libraries=places&callback=initMap"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBeoNSUnQLbpaumfrVHF04GtOzzvxWECMg&libraries=places&callback=initMap"></script>
 
 
   <footer id="footer">
-    Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
+    Copyright (c) 2017 <a href="/MWS_Stage1/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
   </footer>
 
 </body>
